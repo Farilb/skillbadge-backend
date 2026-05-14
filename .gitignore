@@ -1,0 +1,43 @@
+# Dépendances
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environnement
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Base de données
+*.db
+*.sqlite
+prisma/*.db
+prisma/*.db-journal
+
+# Fichiers générés
+dist/
+build/
+.DS_Store
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Prisma (ne pas versionner migrations ? À toi de décider)
+# prisma/migrations/
+
+# OS
+Thumbs.db
+Desktop.ini

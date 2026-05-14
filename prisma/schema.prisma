@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  FORMATEUR
+  APPRENANT
+  RECRUTEUR
+  ADMIN
+}
+
+enum Level {
+  DEBUTANT
+  INTERMEDIAIRE
+  EXPERT
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  name          String
+  role          UserRole @default(APPRENANT)
+  walletAddress String?  @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations corrigées
+  badgeTypes     BadgeType[] // BadgeTypes créés par l'utilisateur (formateur)
+  badgesIssued   Badge[]     @relation("Issuer") // Badges émis
+  badgesReceived Badge[]     @relation("Receiver") // Badges reçus
+}
+
+model BadgeType {
+  id        String   @id @default(uuid())
+  name      String
+  level     Level
+  org       String
+  domain    String
+  emoji     String   @default("🏅")
+  issuerId  String
+  issuer    User     @relation(fields: [issuerId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  badges Badge[]
+}
+
+model Badge {
+  id            String    @id @default(uuid())
+  badgeTypeId   String
+  badgeType     BadgeType @relation(fields: [badgeTypeId], references: [id], onDelete: Cascade)
+  student       String
+  studentWallet String
+  tx            String
+  block         Int
+  revoked       Boolean   @default(false)
+  date          DateTime  @default(now())
+
+  issuerId String
+  issuer   User   @relation("Issuer", fields: [issuerId], references: [id], onDelete: Cascade)
+
+  receiverId String?
+  receiver   User?   @relation("Receiver", fields: [receiverId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
