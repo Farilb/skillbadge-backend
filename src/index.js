@@ -23,9 +23,38 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/badges', badgeRoutes);
 
-// Health check
+// ✅ Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// ✅ Route racine (pour tester)
+app.get('/', (req, res) => {
+  res.json({
+    message: 'SkillBadge API is running!',
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      badges: '/api/badges',
+      admin: '/api/admin'
+    }
+  });
+});
+
+// ✅ Gestion des erreurs 404
+app.use('*', (req, res) => {
+  res.status(404).json({
+    error: `Route ${req.originalUrl} not found`,
+    availableEndpoints: {
+      root: '/',
+      health: '/api/health',
+      auth: '/api/auth',
+      badges: '/api/badges',
+      admin: '/api/admin'
+    }
+  });
 });
 
 // Démarrage
