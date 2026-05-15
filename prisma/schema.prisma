@@ -8,10 +8,10 @@ datasource db {
 }
 
 enum UserRole {
+  ADMIN
   FORMATEUR
   APPRENANT
   RECRUTEUR
-  ADMIN
 }
 
 enum Level {
@@ -25,15 +25,19 @@ model User {
   email         String   @unique
   password      String
   name          String
+  institute     String?
   role          UserRole @default(APPRENANT)
   walletAddress String?  @unique
+  isApproved    Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  // Relations corrigées
-  badgeTypes     BadgeType[] // BadgeTypes créés par l'utilisateur (formateur)
-  badgesIssued   Badge[]     @relation("Issuer") // Badges émis
-  badgesReceived Badge[]     @relation("Receiver") // Badges reçus
+  // Relations avec les badges
+  badgesIssued   Badge[] @relation("Issuer") // Badges émis par ce formateur
+  badgesReceived Badge[] @relation("Receiver") // Badges reçus par cet apprenant
+
+  // Relation avec les types de badges créés
+  badgeTypes BadgeType[] // Types de badges créés par ce formateur
 }
 
 model BadgeType {

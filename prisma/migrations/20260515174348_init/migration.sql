@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "UserRole" AS ENUM ('FORMATEUR', 'APPRENANT', 'RECRUTEUR', 'ADMIN');
+CREATE TYPE "UserRole" AS ENUM ('ADMIN', 'FORMATEUR', 'APPRENANT', 'RECRUTEUR');
 
 -- CreateEnum
 CREATE TYPE "Level" AS ENUM ('DEBUTANT', 'INTERMEDIAIRE', 'EXPERT');
@@ -10,8 +10,10 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "institute" TEXT,
     "role" "UserRole" NOT NULL DEFAULT 'APPRENANT',
     "walletAddress" TEXT,
+    "isApproved" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

@@ -17,7 +17,9 @@ app.use(express.json());
 // Routes
 const authRoutes = require('./routes/authRoutes');
 const badgeRoutes = require('./routes/badgeRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
+app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/badges', badgeRoutes);
 

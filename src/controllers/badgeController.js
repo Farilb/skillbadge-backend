@@ -7,16 +7,16 @@ const randomTx = () => '0x' + Math.random().toString(36).substr(2, 8) + '...' + 
 const randomBlock = () => 14870000 + Math.floor(Math.random() * 50000);
 
 // Obtenir tous les badges
-exports.getAllBadges = async (req, res) => {
-  try {
-    const badges = await prisma.badge.findMany({
-      include: { badgeType: true }
-    });
-    res.json({ success: true, data: badges });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+// exports.getAllBadges = async (req, res) => {
+//   try {
+//     const badges = await prisma.badge.findMany({
+//       include: { badgeType: true }
+//     });
+//     res.json({ success: true, data: badges });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 // Obtenir les types de badges
 exports.getBadgeTypes = async (req, res) => {
@@ -116,6 +116,20 @@ exports.deleteBadge = async (req, res) => {
 
     res.json({ success: true, message: 'Badge supprimé' });
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getAllBadges = async (req, res) => {
+  try {
+    console.log('🔍 Récupération des badges...');
+    const badges = await prisma.badge.findMany({
+      include: { badgeType: true }
+    });
+    console.log(`📊 ${badges.length} badges trouvés`);
+    res.json({ success: true, data: badges });
+  } catch (error) {
+    console.error('❌ Erreur:', error);
     res.status(500).json({ error: error.message });
   }
 };
